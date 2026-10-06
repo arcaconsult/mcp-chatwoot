@@ -55,6 +55,12 @@ export const register: RegisterFn = (server, client) => {
           .record(z.string(), z.any())
           .optional()
           .describe("Custom attributes as key-value pairs"),
+        additional_attributes: z
+          .record(z.string(), z.any())
+          .optional()
+          .describe(
+            "Native Chatwoot additional attributes (e.g. company_name, city, country, description)",
+          ),
       },
     },
     async ({ account_id, ...body }) => {
@@ -100,6 +106,12 @@ export const register: RegisterFn = (server, client) => {
           .record(z.string(), z.any())
           .optional()
           .describe("Custom attributes"),
+        additional_attributes: z
+          .record(z.string(), z.any())
+          .optional()
+          .describe(
+            "Native Chatwoot additional attributes (e.g. company_name, city, country, description)",
+          ),
       },
       annotations: { idempotentHint: true },
     },
