@@ -1,0 +1,26 @@
+# mcp-chatwoot — HTTP transport (fazer.ai/mcp-chatwoot fork) with self-contained OAuth
+# Domain: chatwoot.mcp.arcaconsult.com.br
+services:
+  mcp-chatwoot:
+    build: .
+    container_name: mcp-chatwoot
+    restart: unless-stopped
+    environment:
+      TZ: America/Sao_Paulo
+      CHATWOOT_BASE_URL: ${CHATWOOT_BASE_URL}
+      CHATWOOT_API_TOKEN: ${CHATWOOT_API_TOKEN}
+      MCP_AUTH_PASSWORD: ${MCP_AUTH_PASSWORD}
+      PUBLIC_URL: ${PUBLIC_URL}
+      PORT: 3000
+      OAUTH_STATE_FILE: /app/data/oauth-state.json
+    volumes:
+      - oauth-data:/app/data
+    networks:
+      - npm-net
+
+volumes:
+  oauth-data:
+
+networks:
+  npm-net:
+    external: true
