@@ -55,11 +55,41 @@ const registrations = [
   registerWebhooks,
 ];
 
+// MCP_TOOLS (comma-separated tool names) restricts the server to a closed list,
+// e.g. read-only tools for a customer install. Unset = every tool.
+export function allowedTools(
+  value = process.env.MCP_TOOLS,
+): Set<string> | null {
+  const names = (value ?? "")
+    .split(",")
+    .map((n) => n.trim())
+    .filter(Boolean);
+  return names.length ? new Set(names) : null;
+}
+
 export function registerAllTools(
   server: McpServer,
   client: ChatwootClient,
+  allowed: Set<string> | null = allowedTools(),
 ): void {
+  const target = allowed
+    ? (new Proxy(server, {
+        get(obj, prop, receiver) {
+          if (prop === "registerTool") {
+            return (name: string, ...rest: unknown[]) =>
+              allowed.has(name)
+                ? (obj.registerTool as (...a: unknown[]) => unknown).call(
+                    obj,
+                    name,
+                    ...rest,
+                  )
+                : undefined;
+          }
+          return Reflect.get(obj, prop, receiver);
+        },
+      }) as McpServer)
+    : server;
   for (const register of registrations) {
-    register(server, client);
+    register(target, client);
   }
 }
