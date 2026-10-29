@@ -220,6 +220,62 @@ export const register: RegisterFn = (server, client) => {
     },
   );
 
+  // Arcaconsult: requires the arcaconsult/chatwoot build with the WhatsApp
+  // archive/mute endpoints and a session (native) WhatsApp inbox.
+  server.registerTool(
+    "conversations_whatsapp_archive",
+    {
+      title: "Archive WhatsApp Chat",
+      description:
+        "Archive or unarchive the conversation's chat on the inbox owner's own WhatsApp (native session inboxes only). Nothing is sent to the contact. Queued: the phone applies it shortly after.",
+      inputSchema: {
+        account_id: accountId,
+        conversation_id: conversationId,
+        archive: z
+          .boolean()
+          .describe("true to archive the chat, false to unarchive it"),
+      },
+    },
+    async ({ account_id, conversation_id, archive }) => {
+      const result = await client.post(
+        `${base(account_id)}/${conversation_id}/whatsapp_archive`,
+        { archive },
+      );
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+      };
+    },
+  );
+
+  server.registerTool(
+    "conversations_whatsapp_mute",
+    {
+      title: "Mute WhatsApp Chat",
+      description:
+        "Mute or unmute the conversation's chat on the inbox owner's own WhatsApp (native session inboxes only). Duration: 8h, 1w (one week) or always. Nothing is sent to the contact.",
+      inputSchema: {
+        account_id: accountId,
+        conversation_id: conversationId,
+        mute: z.boolean().describe("true to mute the chat, false to unmute it"),
+        duration: z
+          .enum(["8h", "1w", "always"])
+          .optional()
+          .describe(
+            "How long to mute for (only with mute=true). Defaults to always.",
+          ),
+      },
+    },
+    async ({ account_id, conversation_id, mute, duration }) => {
+      const result = await client.post(
+        `${base(account_id)}/${conversation_id}/whatsapp_mute`,
+        mute ? { mute, duration: duration ?? "always" } : { mute },
+      );
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+      };
+    },
+  );
+
   server.registerTool(
     "conversations_set_custom_attributes",
     {

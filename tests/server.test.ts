@@ -14,7 +14,7 @@ describe("Server", () => {
     expect(server).toBeDefined();
   });
 
-  test("registers all 129 tools", () => {
+  test("registers all 125 tools", () => {
     const client = new ChatwootClient(
       "https://chatwoot.example.com",
       "test-token",
@@ -23,7 +23,7 @@ describe("Server", () => {
 
     // biome-ignore lint/suspicious/noExplicitAny: accessing internal properties for testing
     const tools = (server as any)._registeredTools;
-    expect(Object.keys(tools).length).toBe(123);
+    expect(Object.keys(tools).length).toBe(125);
   });
 
   test("has fazer.ai exclusive tools", () => {
@@ -44,6 +44,10 @@ describe("Server", () => {
 
     // Scheduled messages
     expect(tools.scheduled_messages_list).toBeDefined();
+
+    // Arcaconsult: WhatsApp archive/mute
+    expect(tools.conversations_whatsapp_archive).toBeDefined();
+    expect(tools.conversations_whatsapp_mute).toBeDefined();
   });
 });
 

@@ -85,7 +85,7 @@ Add to your `.vscode/mcp.json`:
 }
 ```
 
-## Available Tools (129)
+## Available Tools (131)
 
 ### Account (2)
 
@@ -119,9 +119,9 @@ Add to your `.vscode/mcp.json`:
 
 `contact_labels_list`, `contact_labels_set`
 
-### Conversations (12)
+### Conversations (14)
 
-`conversations_meta`, `conversations_list`, `conversations_create`, `conversations_filter`, `conversations_get`, `conversations_update`, `conversations_toggle_status`, `conversations_toggle_priority`, `conversations_set_custom_attributes`, `conversations_get_labels`, `conversations_set_labels`, `conversations_reporting_events`
+`conversations_meta`, `conversations_list`, `conversations_create`, `conversations_filter`, `conversations_get`, `conversations_update`, `conversations_toggle_status`, `conversations_toggle_priority`, `conversations_whatsapp_archive`, `conversations_whatsapp_mute`, `conversations_set_custom_attributes`, `conversations_get_labels`, `conversations_set_labels`, `conversations_reporting_events`
 
 ### Conversation Assignments (1)
 
