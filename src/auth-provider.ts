@@ -15,7 +15,7 @@
  * Tokens are stored as SHA-256 hashes, never in the clear. Authorization codes
  * live five minutes and stay in memory only.
  */
-import { createHash, randomBytes, randomUUID } from "node:crypto";
+import { createHash, randomBytes, randomUUID, timingSafeEqual } from "node:crypto";
 import {
   existsSync,
   mkdirSync,
@@ -219,6 +219,13 @@ export class ChatwootMcpAuthProvider implements OAuthServerProvider {
   }
 
   async verifyAccessToken(token: string): Promise<AuthInfo> {
+    // Chave fixa interna (31/10/2026): as sessões do srvdck02 chamam este MCP por 127.0.0.1 com
+    // "Authorization: Bearer <MCP_INTERNAL_TOKEN>", sem OAuth (que é amarrado ao endereço público).
+    const interno = process.env.MCP_INTERNAL_TOKEN ?? "";
+    if (interno.length >= 32 && token.length === interno.length &&
+        timingSafeEqual(Buffer.from(token), Buffer.from(interno))) {
+      return { token, clientId: "interno", scopes: [], expiresAt: Math.floor(Date.now() / 1000) + 3600 };
+    }
     const stored = this.store.state.access[hash(token)];
     // InvalidTokenError makes the SDK answer 401 with WWW-Authenticate, which
     // tells Claude to refresh; a plain Error would surface as a 500.

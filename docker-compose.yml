@@ -4,6 +4,8 @@ services:
   mcp-chatwoot:
     build: .
     container_name: mcp-chatwoot
+    ports:
+      - "127.0.0.1:3002:3000"  # só local: sessões do srvdck02 com MCP_INTERNAL_TOKEN (31/10/2026)
     restart: unless-stopped
     environment:
       TZ: America/Sao_Paulo
@@ -13,6 +15,7 @@ services:
       PUBLIC_URL: ${PUBLIC_URL}
       PORT: 3000
       OAUTH_STATE_FILE: /app/data/oauth-state.json
+      MCP_INTERNAL_TOKEN: ${MCP_INTERNAL_TOKEN}
     volumes:
       - oauth-data:/app/data
     networks:
