@@ -197,6 +197,56 @@ export const register: RegisterFn = (server, client) => {
   );
 
   server.registerTool(
+    "conversations_whatsapp_archive",
+    {
+      title: "Archive Conversation on WhatsApp",
+      description:
+        "Archive or unarchive a conversation in the WhatsApp of the inbox owner (native WhatsApp inboxes). Sends nothing to the contact and does not change the Chatwoot status. Returns queued: the phone applies it shortly after, and a WhatsApp refusal shows only in the logs.",
+      inputSchema: {
+        account_id: accountId,
+        conversation_id: conversationId,
+        archive: z.boolean().describe("true to archive, false to unarchive"),
+      },
+    },
+    async ({ account_id, conversation_id, archive }) => {
+      const result = await client.post(
+        `${base(account_id)}/${conversation_id}/whatsapp_archive`,
+        { archive },
+      );
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+      };
+    },
+  );
+
+  server.registerTool(
+    "conversations_whatsapp_mute",
+    {
+      title: "Mute Conversation on WhatsApp",
+      description:
+        "Mute or unmute a conversation in the WhatsApp of the inbox owner (native WhatsApp inboxes). Sends nothing to the contact. Returns queued: the phone applies it shortly after.",
+      inputSchema: {
+        account_id: accountId,
+        conversation_id: conversationId,
+        mute: z.boolean().describe("true to mute, false to unmute"),
+        duration: z
+          .enum(["8h", "1w", "always"])
+          .optional()
+          .describe("Only with mute=true. Default: always"),
+      },
+    },
+    async ({ account_id, conversation_id, mute, duration }) => {
+      const result = await client.post(
+        `${base(account_id)}/${conversation_id}/whatsapp_mute`,
+        { mute, ...(duration ? { duration } : {}) },
+      );
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+      };
+    },
+  );
+
+  server.registerTool(
     "conversations_toggle_priority",
     {
       title: "Set Conversation Priority",
