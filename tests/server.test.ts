@@ -23,7 +23,7 @@ describe("Server", () => {
 
     // biome-ignore lint/suspicious/noExplicitAny: accessing internal properties for testing
     const tools = (server as any)._registeredTools;
-    expect(Object.keys(tools).length).toBe(123);
+    expect(Object.keys(tools).length).toBe(126);
   });
 
   test("has fazer.ai exclusive tools", () => {
@@ -44,6 +44,9 @@ describe("Server", () => {
 
     // Scheduled messages
     expect(tools.scheduled_messages_list).toBeDefined();
+
+    // Arcaconsult: send a file
+    expect(tools.messages_create_attachment).toBeDefined();
   });
 });
 
