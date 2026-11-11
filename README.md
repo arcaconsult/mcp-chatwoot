@@ -3,11 +3,11 @@
 [![npm version](https://img.shields.io/npm/v/@fazer-ai/mcp-chatwoot.svg)](https://www.npmjs.com/package/@fazer-ai/mcp-chatwoot)
 [![npm downloads](https://img.shields.io/npm/dm/@fazer-ai/mcp-chatwoot.svg)](https://www.npmjs.com/package/@fazer-ai/mcp-chatwoot)
 
-A [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server that exposes the full [Chatwoot](https://www.chatwoot.com/) API — including [fazer.ai](https://fazer.ai) exclusive features — as **129 tools** for use with AI assistants like Claude, VS Code Copilot, and others.
+A [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server that exposes the full [Chatwoot](https://www.chatwoot.com/) API — including [fazer.ai](https://fazer.ai) exclusive features — as **130 tools** for use with AI assistants like Claude, VS Code Copilot, and others.
 
 ## Features
 
-- **129 tools** covering all Chatwoot API endpoints
+- **130 tools** covering all Chatwoot API endpoints
 - Account, Agents, Contacts, Conversations, Messages, Inboxes, Teams, and more
 - Reports (v1 & v2), Help Center, Automation Rules, Custom Attributes, Custom Filters
 - **[fazer.ai] exclusive**: Kanban Boards, Kanban Steps, Kanban Tasks, Kanban Audit Events, Kanban Preferences, Scheduled Messages
@@ -85,7 +85,7 @@ Add to your `.vscode/mcp.json`:
 }
 ```
 
-## Available Tools (131)
+## Available Tools (132)
 
 ### Account (2)
 
@@ -127,9 +127,11 @@ Add to your `.vscode/mcp.json`:
 
 `conversation_assignments_assign`
 
-### Messages (3)
+### Messages (4)
 
-`messages_list`, `messages_create`, `messages_delete`
+`messages_list`, `messages_create`, `messages_create_attachment`, `messages_delete`
+
+`messages_create_attachment` (Arcaconsult) sends a file to a conversation as `multipart/form-data` (`attachments[]`). Exactly one source: `arquivo_url` (http/https, downloaded by the server: 60 s timeout, every redirect hop checked, private/loopback/link-local addresses refused) or `arquivo_base64` + `nome_arquivo`. Max 40 MB. `mime_type` is optional (guessed from the extension); `content` is the caption; `private: true` makes it an internal note.
 
 ### Custom Attributes (5)
 

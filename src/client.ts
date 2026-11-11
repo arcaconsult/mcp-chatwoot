@@ -72,6 +72,15 @@ export class ChatwootClient {
     });
   }
 
+  /**
+   * POST multipart/form-data (e.g. message attachments). The Content-Type
+   * header is left to fetch so it carries the multipart boundary.
+   */
+  async postForm<T = unknown>(path: string, form: FormData): Promise<T> {
+    const url = this.buildUrl(path);
+    return this.request<T>(url, { method: "POST", body: form });
+  }
+
   async delete<T = unknown>(path: string): Promise<T> {
     const url = this.buildUrl(path);
     return this.request<T>(url, { method: "DELETE" });
